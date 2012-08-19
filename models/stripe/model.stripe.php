@@ -56,7 +56,7 @@ class Plugin_stripe_Model_stripe extends Model {
     }
 
     function delete() {
-        call_user_func(array($this->stripe_class, 'delete'));
+        $this->call('delete');
         parent::delete();
     }
 }
