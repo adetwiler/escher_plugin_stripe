@@ -2,7 +2,7 @@
 
     class Plugin_stripe_Model_transaction extends Model {
         protected $_schemaFields = array(
-            'transaction_id' => 'string',
+            'transaction_id' => array('type' => 'string', 'length' => 64),
             'customer_id' => 'string',
             'product_id' => 'string',
             'card_id' => 'string',

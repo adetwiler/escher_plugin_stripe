@@ -2,7 +2,7 @@
 
     class Plugin_stripe_Model_product extends Model {
         protected $_schemaFields = array(
-            'product_id' => 'string',
+            'product_id' => array('type' => 'string', 'length' => 64),
             'product_name' => 'string',
             'product_cost' => array('type' => 'decimal'),
             'product_created_at' => 'datetime',
