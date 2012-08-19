@@ -5,7 +5,7 @@ class Plugin_stripe_Model_card extends Model {
     protected $_useAddress = FALSE;
     protected $_schemaFields = array(
         'card_id' => array('type' => 'string', 'length' => 32),
-        'customer_id' => 'string',
+        'customer_id' => array('type' => 'string', 'length' => 64),
         'card_name' => 'string',
         'card_pin' => 'string',
         'card_last_status' => 'resource',
@@ -16,6 +16,27 @@ class Plugin_stripe_Model_card extends Model {
         'card_modified_from' => 'resource',
         'card_modified_by' => 'id',
     );
+
+    // Charge the credit card
+    function charge($amount, $currency='usd', $options=array()) {
+        if (empty($this->customer_id)) { return false; }
+
+        $opts = array('amount' => $amount*100, 'currency' => $currency, 'customer' => $this->customer_id);
+        $options = array_merge($opts,$options);
+
+        $transaction = Load::Model('transaction');
+        $transaction->customer_id = $this->customer_id;
+        $transaction->card_id = $this->card_id;
+        $transaction->transaction_currency = $currency;
+        $transaction->transaction_amount = $amount;
+        if (!empty($options['fee'])) {
+            $transaction->fee = $options['fee'];
+        }
+        if (!empty($options['description'])) {
+            $transaction->transaction_description = $options['description'];
+        }
+        $transaction->save($options);
+    }
 
     // The card will create the customer
     function save($args=array()) {
@@ -46,9 +67,23 @@ class Plugin_stripe_Model_card extends Model {
                 $card['card']['address_country'] = $args['country'];
             }
             $customer->save($card);
+            $args=array();
             $this->customer_id = $customer->id();
+        } else {
+            $customer = Load::Model('customer',$this->customer_id);
+            if (!empty($args)) {
+                $customer->save($args);
+            }
         }
         parent::save();
+    }
+
+    function delete() {
+        if (!empty($this->customer_id)) {
+            $customer = Load::Model('customer');
+            $customer->save(array('card' => null));
+        }
+        parent::delete();
     }
 
     function getGUID(){

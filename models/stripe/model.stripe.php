@@ -32,7 +32,9 @@ class Plugin_stripe_Model_stripe extends Model {
                 $obj->$k = $v;
             }
         }
-        $obj->save();
+        if (method_exists($obj,'save')) {
+            $obj->save();
+        }
     }
     
     function save($args=array()) {
@@ -42,5 +44,10 @@ class Plugin_stripe_Model_stripe extends Model {
         $this->_saved = true;
         $this->touch();
         parent::save();
+    }
+
+    function delete() {
+        call_user_func(array($this->stripe_class, 'delete'));
+        parent::delete();
     }
 }
