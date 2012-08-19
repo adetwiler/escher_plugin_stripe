@@ -7,8 +7,7 @@
             'transaction_id' => array('type' => 'string', 'length' => 64),
             'customer_id' => array('type' => 'string', 'length' => 64),
             'card_id' => array('type' => 'string', 'length' => 32),
-            'transaction_amount' => array('type' => 'float'),
-            'transaction_fee' => array('type' => 'float'),
+            'transaction_amount' => 'currency',
             'transaction_currency' => array('type' => 'string', 'length' => '3'),
             'transaction_created_at' => 'datetime',
             'transaction_created_from' => 'resource',
@@ -21,4 +20,11 @@
             // Content
             'transaction_description' => 'content',
         );
+
+        function refund() {
+            if (empty($this->transaction_id)) { return false; }
+            $this->call('refund');
+            $this->transaction_refunded = 1;
+            $this->save(array(),FALSE);
+        }
     }

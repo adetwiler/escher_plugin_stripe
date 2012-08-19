@@ -37,13 +37,22 @@ class Plugin_stripe_Model_stripe extends Model {
         }
     }
     
-    function save($args=array()) {
-        if (!$this->_saved) {
+    function save($args=array(), $save=TRUE) {
+        if (!$this->_saved && $save) {
             $this->set($args);
         }
         $this->_saved = true;
         $this->touch();
         parent::save();
+    }
+
+    function call($method,$args=array()) {
+        if (empty($this->object)) {
+            $obj = $this->get();
+        } else {
+            $obj = $this->object;
+        }
+        $obj->$method($args);
     }
 
     function delete() {
