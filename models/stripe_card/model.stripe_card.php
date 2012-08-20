@@ -3,7 +3,7 @@
 class Plugin_stripe_Model_stripe_card extends Model {
     protected $_useCVC = TRUE;
     protected $_useName = TRUE;
-    protected $_useAddress = FALSE;
+    protected $_useAddress = TRUE;
     protected $_schemaFields = array(
         'stripe_card_id' => array('type' => 'string', 'length' => 32),
         'stripe_customer_id' => array('type' => 'string', 'length' => 64),
@@ -38,7 +38,7 @@ class Plugin_stripe_Model_stripe_card extends Model {
     function save($args=array()) {
         if (empty($this->stripe_card_id)) {
             $this->touch();
-            // Create a random 64 character id.
+            // Create a random 32 character id.
             $this->stripe_card_id = $this->getGUID();
             $customer = Load::Model('stripe_customer');
 
