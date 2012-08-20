@@ -2,6 +2,7 @@
 
 class Plugin_stripe_Model_stripe_card extends Model {
     protected $_useCVC = TRUE;
+    protected $_useName = TRUE;
     protected $_useAddress = FALSE;
     protected $_schemaFields = array(
         'stripe_card_id' => array('type' => 'string', 'length' => 32),
@@ -52,12 +53,16 @@ class Plugin_stripe_Model_stripe_card extends Model {
             if ($this->_useCVC) {
                 $card['card']['cvc'] = $args['cvc'];
             }
+            if ($this->_useName) {
+                $card['card']['name'] = $args['name'];
+            }
             if ($this->_useAddress) {
                 $card['card']['address_line1'] = $args['address'];
                 if (!empty($args['address2'])) {
                     $card['card']['address_line2'] = $args['address2'];
                 }
                 $card['card']['address_zip'] = $args['zip'];
+                $card['card']['address_city'] = $args['city'];
                 $card['card']['address_state'] = $args['state'];
                 $card['card']['address_country'] = $args['country'];
             }
