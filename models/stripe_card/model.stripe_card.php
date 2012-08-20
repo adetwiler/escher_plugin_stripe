@@ -6,8 +6,6 @@ class Plugin_stripe_Model_stripe_card extends Model {
     protected $_schemaFields = array(
         'stripe_card_id' => array('type' => 'string', 'length' => 32),
         'stripe_customer_id' => array('type' => 'string', 'length' => 64),
-        'stripe_card_name' => 'string',
-        'stripe_card_pin' => 'string',
         'stripe_card_last_status' => 'resource',
         'stripe_card_created_at' => 'datetime',
         'stripe_card_created_from' => 'resource',

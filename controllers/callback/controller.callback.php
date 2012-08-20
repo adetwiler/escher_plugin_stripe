@@ -7,6 +7,18 @@ class Plugin_stripe_Controller_callback extends Controller {
         $object = $event_json->data->object;
 
         switch($event_json->type) {
+            case 'charge.succeeded':
+                $card = Load::Model('stripe_card',array('stripe_customer_id' => $object->customer));
+                if (empty($card)) { return false; }
+                $card->stripe_card_last_status = "succeeded";
+                $card->save();
+                break;
+            case 'charge.failed':
+                $card = Load::Model('stripe_card',array('stripe_customer_id' => $object->customer));
+                if (empty($card)) { return false; }
+                $card->stripe_card_last_status = "failed";
+                $card->save();
+                break;
             case 'charge.refunded':
                 $charge = Load::Model('stripe_charge',$object->id);
                 if (empty($charge)) { return false; }
