@@ -24,15 +24,15 @@ class Plugin_stripe_Model_stripe_card extends Model {
         $opts = array('amount' => $amount*100, 'currency' => $currency, 'customer' => $this->stripe_customer_id);
         $options = array_merge($opts,$options);
 
-        $transaction = Load::Model('stripe_transaction');
-        $transaction->stripe_customer_id = $this->stripe_customer_id;
-        $transaction->stripe_card_id = $this->stripe_card_id;
-        $transaction->stripe_transaction_currency = $currency;
-        $transaction->stripe_transaction_amount = $amount;
+        $charge = Load::Model('stripe_charge');
+        $charge->stripe_customer_id = $this->stripe_customer_id;
+        $charge->stripe_card_id = $this->stripe_card_id;
+        $charge->stripe_charge_currency = $currency;
+        $charge->stripe_charge_amount = $amount;
         if (!empty($options['description'])) {
-            $transaction->stripe_transaction_description = $options['description'];
+            $charge->stripe_charge_description = $options['description'];
         }
-        $transaction->save($options);
+        $charge->save($options,TRUE);
     }
 
     // The card will create the customer
@@ -63,13 +63,13 @@ class Plugin_stripe_Model_stripe_card extends Model {
                 $card['card']['address_state'] = $args['state'];
                 $card['card']['address_country'] = $args['country'];
             }
-            $customer->save($card);
+            $customer->save($card,TRUE);
             $args=array();
             $this->stripe_customer_id = $customer->id();
         } else {
             $customer = Load::Model('customer',$this->stripe_customer_id);
             if (!empty($args)) {
-                $customer->save($args);
+                $customer->save($args,TRUE);
             }
         }
         parent::save();
@@ -78,7 +78,7 @@ class Plugin_stripe_Model_stripe_card extends Model {
     function delete() {
         if (!empty($this->stripe_customer_id)) {
             $customer = Load::Model('stripe_customer');
-            $customer->save(array('card' => null));
+            $customer->save(array('card' => null), TRUE);
         }
         parent::delete();
     }

@@ -16,13 +16,18 @@ class Plugin_stripe_Model_stripe extends Model {
         return call_user_func(array($this->stripe_class, 'all'));
     }
 
-    protected function get() {
-        return call_user_func(array($this->stripe_class, 'retrieve'),$this->id());
+    protected function get($id=null) {
+        if ($id == null) {
+            return call_user_func(array($this->stripe_class, 'retrieve'),$this->id());
+        }
+        return call_user_func(array($this->stripe_class, 'retrieve'),$id);
     }
 
     protected function set($args=array()) {
         if (!is_array($args)) { return false; }
-        $obj = $this->object;
+        if (!empty($this->{$this->_m().'_id'})) {
+            $this->object = $obj = $this->get();
+        }
         if (empty($obj)) {
             $this->object = $obj = call_user_func(array($this->stripe_class, 'create'),$args);
             $this->{$this->_m().'_id'} = $obj->id;
@@ -37,7 +42,7 @@ class Plugin_stripe_Model_stripe extends Model {
         }
     }
     
-    function save($args=array(), $save=TRUE) {
+    function save($args=array(), $save=FALSE) {
         if (!$this->_saved && $save) {
             $this->set($args);
         }

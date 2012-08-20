@@ -36,6 +36,6 @@
             $this->stripe_plan_currency = $args['currency'];
 
             $args['amount'] = $args['amount'] * 100;
-            parent::save($args);
+            parent::save($args,TRUE);
         }
     }
