@@ -8,7 +8,7 @@ class Plugin_stripe_Model_stripe extends Model {
         $this->stripe = Load::Helper(array('stripe','stripe'));
 
         if (!empty($this->{$this->_m().'_id'})) {
-            $this->get();
+            $this->object = $this->get();
         }
     }
 
