@@ -1,6 +1,7 @@
 <?php
 
 class Plugin_stripe_Model_stripe_card extends Model {
+    protected $_createCC = FALSE;
     protected $_useCVC = TRUE;
     protected $_useName = TRUE;
     protected $_useAddress = TRUE;
@@ -42,35 +43,41 @@ class Plugin_stripe_Model_stripe_card extends Model {
             $this->stripe_card_id = $this->getGUID();
             $customer = Load::Model('stripe_customer');
 
-            // create the card in stripe.
-            $card = array('card' =>
-                array(
-                    'number' => $args['number'],
-                    'exp_month' => $args['exp_month'],
-                    'exp_year' => $args['exp_year'],
-                )
-            );
-            if ($this->_useCVC) {
-                $card['card']['cvc'] = $args['cvc'];
-            }
-            if ($this->_useName) {
-                $card['card']['name'] = $args['name'];
-            }
-            if ($this->_useAddress) {
-                $card['card']['address_line1'] = $args['address'];
-                if (!empty($args['address2'])) {
-                    $card['card']['address_line2'] = $args['address2'];
+            if ($this->_createCC) {
+                // create the card in stripe.
+                $card = array('card' =>
+                    array(
+                        'number' => $args['number'],
+                        'exp_month' => $args['exp_month'],
+                        'exp_year' => $args['exp_year'],
+                    )
+                );
+                if ($this->_useCVC) {
+                    $card['card']['cvc'] = $args['cvc'];
                 }
-                $card['card']['address_zip'] = $args['zip'];
-                $card['card']['address_city'] = $args['city'];
-                $card['card']['address_state'] = $args['state'];
-                $card['card']['address_country'] = $args['country'];
+                if ($this->_useName) {
+                    $card['card']['name'] = $args['name'];
+                }
+                if ($this->_useAddress) {
+                    $card['card']['address_line1'] = $args['address'];
+                    if (!empty($args['address2'])) {
+                        $card['card']['address_line2'] = $args['address2'];
+                    }
+                    $card['card']['address_zip'] = $args['zip'];
+                    $card['card']['address_city'] = $args['city'];
+                    $card['card']['address_state'] = $args['state'];
+                    $card['card']['address_country'] = $args['country'];
+                }
+                $customer->save($card,TRUE);
+            } else {
+                $card = array('card' => $args['token']);
+                $customer->save($card,TRUE);
             }
-            $customer->save($card,TRUE);
             $args=array();
             $this->stripe_customer_id = $customer->id();
         } else {
-            $customer = Load::Model('customer',$this->stripe_customer_id);
+            $customer = Load::Model('stripe_customer',$this->stripe_customer_id);
+            if (empty($customer)) { return false; }
             if (!empty($args)) {
                 $customer->save($args,TRUE);
             }

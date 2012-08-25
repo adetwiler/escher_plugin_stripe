@@ -28,17 +28,19 @@ class Plugin_stripe_Model_stripe extends Model {
         if (!empty($this->{$this->_m().'_id'})) {
             $this->object = $obj = $this->get();
         }
+
         if (empty($obj)) {
             $this->object = $obj = call_user_func(array($this->stripe_class, 'create'),$args);
             $this->{$this->_m().'_id'} = $obj->id;
-        }
-        if (!empty($args)) {
-            foreach ($args as $k => $v) {
-                $obj->$k = $v;
+        } else {
+            if (!empty($args)) {
+                foreach ($args as $k => $v) {
+                    $obj->$k = $v;
+                }
             }
-        }
-        if (method_exists($obj,'save')) {
-            $obj->save();
+            if (method_exists($obj,'save')) {
+                $obj->save();
+            }
         }
     }
     
