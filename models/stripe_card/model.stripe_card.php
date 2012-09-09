@@ -19,14 +19,20 @@ class Plugin_stripe_Model_stripe_card extends Model {
 
     // Charge the credit card
     function charge($amount, $currency='usd', $options=array()) {
-        if (empty($this->stripe_customer_id)) { return false; }
-
         $opts = array('amount' => $amount*100, 'currency' => $currency, 'customer' => $this->stripe_customer_id);
         $options = array_merge($opts,$options);
 
+        if (!empty($options['card'])) {
+            unset($options['customer']);
+        }
+
         $charge = Load::Model('stripe_charge');
-        $charge->stripe_customer_id = $this->stripe_customer_id;
-        $charge->stripe_card_id = $this->stripe_card_id;
+        if (!empty($this->stripe_customer_id)) {
+            $charge->stripe_customer_id = $this->stripe_customer_id;
+        }
+        if (!empty($this->stripe_card_id)) {
+            $charge->stripe_card_id = $this->stripe_card_id;
+        }
         $charge->stripe_charge_currency = $currency;
         $charge->stripe_charge_amount = $amount;
         if (!empty($options['description'])) {
