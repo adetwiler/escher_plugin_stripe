@@ -39,6 +39,7 @@ class Plugin_stripe_Model_stripe_card extends Model {
             $charge->stripe_charge_description = $options['description'];
         }
         $charge->save($options,TRUE);
+        return $charge;
     }
 
     // The card will create the customer
