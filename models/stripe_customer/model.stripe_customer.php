@@ -6,12 +6,12 @@
         protected $_schemaFields = array(
             'stripe_customer_id' => array('type' => 'string', 'length' => 64),
             'stripe_plan_id' => array('type' => 'string', 'length' => 64),
-            'stripe_customer_created_at' => 'datetime',
-            'stripe_customer_created_from' => 'resource',
-            'stripe_customer_created_by' => 'id',
-            'stripe_customer_modified_at' => 'datetime',
-            'stripe_customer_modified_from' => 'resource',
-            'stripe_customer_modified_by' => 'id',
+            'created_at' => 'datetime',
+            'created_from' => 'resource',
+            'created_by' => 'id',
+            'modified_at' => 'datetime',
+            'modified_from' => 'resource',
+            'modified_by' => 'id',
             'stripe_customer_deleted' => array('type' => 'int','range' => 1),
         );
 

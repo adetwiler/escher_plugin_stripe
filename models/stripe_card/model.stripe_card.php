@@ -9,12 +9,12 @@ class Plugin_stripe_Model_stripe_card extends Model {
         'stripe_card_id' => array('type' => 'string', 'length' => 32),
         'stripe_customer_id' => array('type' => 'string', 'length' => 64),
         'stripe_card_last_status' => 'resource',
-        'stripe_card_created_at' => 'datetime',
-        'stripe_card_created_from' => 'resource',
-        'stripe_card_created_by' => 'id',
-        'stripe_card_modified_at' => 'datetime',
-        'stripe_card_modified_from' => 'resource',
-        'stripe_card_modified_by' => 'id',
+        'created_at' => 'datetime',
+        'created_from' => 'resource',
+        'created_by' => 'id',
+        'modified_at' => 'datetime',
+        'modified_from' => 'resource',
+        'modified_by' => 'id',
     );
 
     // Charge the credit card

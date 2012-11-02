@@ -43,7 +43,7 @@ class Plugin_stripe_Controller_callback extends Controller {
         $event->stripe_event_type = $event_json->type;
         $event->stripe_event_parent_type = 'stripe_'.$object->object;
         $event->stripe_event_parent_id = $object->id;
-        $event->stripe_event_created_from = "webhook";
+        $event->created_from = "webhook";
         $event->save();
     }
 }

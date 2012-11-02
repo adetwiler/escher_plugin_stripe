@@ -9,12 +9,12 @@
             'stripe_plan_interval' => 'resource',
             'stripe_plan_amount' => 'currency',
             'stripe_plan_currency' => array('type' => 'string', 'length' => 3),
-            'stripe_plan_created_at' => 'datetime',
-            'stripe_plan_created_from' => 'resource',
-            'stripe_plan_created_by' => 'id',
-            'stripe_plan_modified_at' => 'datetime',
-            'stripe_plan_modified_from' => 'resource',
-            'stripe_plan_modified_by' => 'id',
+            'created_at' => 'datetime',
+            'created_from' => 'resource',
+            'created_by' => 'id',
+            'modified_at' => 'datetime',
+            'modified_from' => 'resource',
+            'modified_by' => 'id',
         );
 
         function save($args=array()) {

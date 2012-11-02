@@ -8,8 +8,8 @@
             'stripe_event_type' => 'resource',
             'stripe_event_parent_type' => 'resource',
             'stripe_event_parent_id' => array('type' => 'string', 'length' => 64),
-            'stripe_event_created_at' => 'datetime',
-            'stripe_event_created_from' => 'resource',
-            'stripe_event_created_by' => 'id',
+            'created_at' => 'datetime',
+            'created_from' => 'resource',
+            'created_by' => 'id',
         );
     }
