@@ -29,6 +29,16 @@ class Plugin_stripe_Model_stripe_card extends Model {
         $charge = Load::Model('stripe_charge');
         if (!empty($this->stripe_customer_id)) {
             $charge->stripe_customer_id = $this->stripe_customer_id;
+        } else {
+            if ($options['createCustomer']) {
+                unset($options['createCustomer']);
+                $customer = Load::Model('stripe_customer');
+                $card = $options['card'];
+                $customer->save(array('card'=>$card),TRUE);
+                unset($options['card']);
+                $this->stripe_customer_id = $customer->id();
+                $options['customer'] = $customer->id();
+            }
         }
         if (!empty($this->stripe_card_id)) {
             $charge->stripe_card_id = $this->stripe_card_id;

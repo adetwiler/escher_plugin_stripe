@@ -15,9 +15,9 @@
             'stripe_customer_deleted' => array('type' => 'int','range' => 1),
         );
 
-        function subscribe($plan_id) {
+        function subscribe($plan_id,$update=FALSE) {
             if (empty($this->stripe_customer_id)) { return false; }
-            if (empty($this->stripe_plan_id)) {
+            if (!$update) {
                 $this->stripe_plan_id = $plan_id;
                 $this->save(
                     array(
@@ -34,10 +34,10 @@
                 $this->save();
             }
         }
-        function unsubscribe() {
+        function unsubscribe($at_period_end = TRUE) {
             unset($this->stripe_plan_id);
             if (empty($this->stripe_customer_id)) { return false; }
-            $this->call('cancelSubscription');
+            $this->call('cancelSubscription',array("at_period_end" => $at_period_end));
             $this->save();
         }
 
