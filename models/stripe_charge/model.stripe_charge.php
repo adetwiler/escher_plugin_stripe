@@ -1,4 +1,4 @@
-<?php Load::Model('stripe');
+<?php Load::Model(array('stripe','stripe'));
 
     class Plugin_stripe_Model_stripe_charge extends Plugin_stripe_Model_stripe {
         protected $stripe_class='Stripe_Charge';

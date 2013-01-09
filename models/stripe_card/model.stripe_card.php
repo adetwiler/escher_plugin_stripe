@@ -26,13 +26,13 @@ class Plugin_stripe_Model_stripe_card extends Model {
             unset($options['customer']);
         }
 
-        $charge = Load::Model('stripe_charge');
+        $charge = Load::Model(array('stripe','stripe_charge'));
         if (!empty($this->stripe_customer_id)) {
             $charge->stripe_customer_id = $this->stripe_customer_id;
         } else {
             if ($options['createCustomer']) {
                 unset($options['createCustomer']);
-                $customer = Load::Model('stripe_customer');
+                $customer = Load::Model(array('stripe','stripe_customer'));
                 $card = $options['card'];
                 $customer->save(array('card'=>$card),TRUE);
                 unset($options['card']);
@@ -58,7 +58,7 @@ class Plugin_stripe_Model_stripe_card extends Model {
             $this->touch();
             // Create a random 32 character id.
             $this->stripe_card_id = $this->getGUID();
-            $customer = Load::Model('stripe_customer');
+            $customer = Load::Model(array('stripe','stripe_customer'));
 
             if ($this->_createCC) {
                 // create the card in stripe.
@@ -93,7 +93,7 @@ class Plugin_stripe_Model_stripe_card extends Model {
             $args=array();
             $this->stripe_customer_id = $customer->id();
         } else {
-            $customer = Load::Model('stripe_customer',$this->stripe_customer_id);
+            $customer = Load::Model(array('stripe','stripe_customer'),$this->stripe_customer_id);
             if (empty($customer)) { return false; }
             if (!empty($args)) {
                 $customer->save($args,TRUE);
@@ -104,7 +104,7 @@ class Plugin_stripe_Model_stripe_card extends Model {
 
     function delete() {
         if (!empty($this->stripe_customer_id)) {
-            $customer = Load::Model('stripe_customer');
+            $customer = Load::Model(array('stripe','stripe_customer'));
             $customer->save(array('card' => null), TRUE);
         }
         parent::delete();
