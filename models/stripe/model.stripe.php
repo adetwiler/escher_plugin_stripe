@@ -16,12 +16,15 @@ class Plugin_stripe_Model_stripe extends Model {
         return call_user_func(array($this->stripe_class, 'all'));
     }
 
-    protected function get($id=null) {
+    function get($id=null) {
         if ($id == null) {
             return call_user_func(array($this->stripe_class, 'retrieve'),$this->id());
         }
         return call_user_func(array($this->stripe_class, 'retrieve'),$id);
     }
+
+    function setStripeClass($class) { $this->stripe_class = 'stripe_'.$class; }
+    function getStripeClass() { return $this->stripe_class; }
 
     protected function set($args=array()) {
         if (!is_array($args)) { return false; }
